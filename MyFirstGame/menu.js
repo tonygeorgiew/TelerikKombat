@@ -1,4 +1,4 @@
-// Simple menu class
+// Resource page http://www.iguanademos.com/Jare/docs/html5/Lessons/Lesson4/
 
 Menu = function(title, items, footer, y, size, width, callback, backgroundCallback)
 {

@@ -109,9 +109,11 @@ function update() {
     //  Collide the player1 and the stars with the platforms
     var hitPlatform = game.physics.arcade.collide(player1, platforms);
         hitPlatform = game.physics.arcade.collide(player2, platforms);
+   // var hitPlayers = game.physics.arcade.collide(player1,player2)
 //????????????????????????????
 
     game.physics.arcade.collide(stars, platforms);
+   // game.physics.arcade.collide(player1,player2)
 
     //  Checks to see if the player1 overlaps with any of the stars, if he does call the collectStar function
     game.physics.arcade.overlap(player1, stars, collectStar, null, this);
@@ -120,7 +122,26 @@ function update() {
     //  Reset the player1s velocity (movement)
     player1.body.velocity.x = 0;
     player2.body.velocity.x = 0;
+    //cursors.addKeys(W,A,S,D);
+    keyLeft = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    keyRight = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    keyUP =  game.input.keyboard.addKey(Phaser.Keyboard.W);
+    if(keyLeft.isDown){
+        player2.body.velocity.x = -150;
 
+        player2.animations.play('left');
+    }else if (keyRight.isDown) {
+        //  Move to the right
+        player2.body.velocity.x = 150;
+
+        player2.animations.play('right');
+    }
+     else {
+        //  Stand still
+        player2.animations.stop();
+
+        player2.frame = 4;
+    }
     if (cursors.left.isDown) {
         //  Move to the left
         player1.body.velocity.x = -150;
@@ -138,7 +159,11 @@ function update() {
         player1.frame = 4;
     }
 
+
     //  Allow the player1 to jump if they are touching the ground.
+    // if (keyUp.isDown && player2.body.touching.down && hitPlatform) {
+    //     player2.body.velocity.y = -350;
+    // }
     if (cursors.up.isDown && player1.body.touching.down && hitPlatform) {
         player1.body.velocity.y = -350;
     }

@@ -5,13 +5,19 @@ function preload() {
     game.load.image('mortal', 'assets/mortal.jpg');
     game.load.image('ground', 'assets/platform.jpg');
     //game.load.image('star', 'assets/star.png');
+    //Dude 1
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+    //Dude2
+    //game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 
 }
 
-var player;
+var player1;
+var player2;
+
 var platforms;
 var cursors;
+var cursors2;
 
 var stars;
 var score = 0;
@@ -47,20 +53,29 @@ function create() {
     ledge = platforms.create(-150, 250, 'ground');
     ledge.body.immovable = true;
 
-    // The player and its settings
-    player = game.add.sprite(32, game.world.height - 150, 'dude');
+    // The player1 and its settings
+    player1 = game.add.sprite(32, game.world.height - 150, 'dude');
+    player2 = game.add.sprite(32, game.world.height - 550, 'dude');
 
-    //  We need to enable physics on the player
-    game.physics.arcade.enable(player);
+    //  We need to enable physics on the player1
+    game.physics.arcade.enable(player1);
+    game.physics.arcade.enable(player2);
 
-    //  Player physics properties. Give the little guy a slight bounce.
-    player.body.bounce.y = 0.2;
-    player.body.gravity.y = 300;
-    player.body.collideWorldBounds = true;
+    //  player1 physics properties. Give the little guy a slight bounce.
+    player1.body.bounce.y = 0.2;
+    player1.body.gravity.y = 300;
+    player1.body.collideWorldBounds = true;
+
+    player2.body.bounce.y = 0.2;
+    player2.body.gravity.y = 300;
+    player2.body.collideWorldBounds = true;
 
     //  Our two animations, walking left and right.
-    player.animations.add('left', [0, 1, 2, 3], 10, true);
-    player.animations.add('right', [5, 6, 7, 8], 10, true);
+    player1.animations.add('left', [0, 1, 2, 3], 10, true);
+    player1.animations.add('right', [5, 6, 7, 8], 10, true);
+
+    player2.animations.add('left', [0, 1, 2, 3], 10, true);
+    player2.animations.add('right', [5, 6, 7, 8], 10, true);
 
     //  Finally some stars to collect
     stars = game.add.group();
@@ -85,46 +100,52 @@ function create() {
 
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
+    cursors = game.input.keyboard.addKeys( { 'up': Phaser.Keyboard.W, 'down': Phaser.Keyboard.S, 'left': Phaser.Keyboard.A, 'right': Phaser.Keyboard.D } );
 
 }
 
 function update() {
 
-    //  Collide the player and the stars with the platforms
-    var hitPlatform = game.physics.arcade.collide(player, platforms);
+    //  Collide the player1 and the stars with the platforms
+    var hitPlatform = game.physics.arcade.collide(player1, platforms);
+        hitPlatform = game.physics.arcade.collide(player2, platforms);
+//????????????????????????????
+
     game.physics.arcade.collide(stars, platforms);
 
-    //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-    game.physics.arcade.overlap(player, stars, collectStar, null, this);
+    //  Checks to see if the player1 overlaps with any of the stars, if he does call the collectStar function
+    game.physics.arcade.overlap(player1, stars, collectStar, null, this);
+    game.physics.arcade.overlap(player2, stars, collectStar, null, this);
 
-    //  Reset the players velocity (movement)
-    player.body.velocity.x = 0;
+    //  Reset the player1s velocity (movement)
+    player1.body.velocity.x = 0;
+    player2.body.velocity.x = 0;
 
     if (cursors.left.isDown) {
         //  Move to the left
-        player.body.velocity.x = -150;
+        player1.body.velocity.x = -150;
 
-        player.animations.play('left');
+        player1.animations.play('left');
     } else if (cursors.right.isDown) {
         //  Move to the right
-        player.body.velocity.x = 150;
+        player1.body.velocity.x = 150;
 
-        player.animations.play('right');
+        player1.animations.play('right');
     } else {
         //  Stand still
-        player.animations.stop();
+        player1.animations.stop();
 
-        player.frame = 4;
+        player1.frame = 4;
     }
 
-    //  Allow the player to jump if they are touching the ground.
-    if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
-        player.body.velocity.y = -350;
+    //  Allow the player1 to jump if they are touching the ground.
+    if (cursors.up.isDown && player1.body.touching.down && hitPlatform) {
+        player1.body.velocity.y = -350;
     }
 
 }
 
-function collectStar(player, star) {
+function collectStar(player1, star) {
 
     // Removes the star from the screen
     star.kill();

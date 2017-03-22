@@ -4,12 +4,11 @@ function preload() {
 
     game.load.image('mortal', 'assets/mortal.jpg');
     game.load.image('ground', 'assets/platform.jpg');
-    //game.load.image('star', 'assets/star.png');
+    game.load.image('star', 'assets/star.png');
     //Dude 1
-    game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+    game.load.spritesheet('dude', 'assets/enemy.png', 38.5, 56);
     //Dude2
-    //game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-
+    game.load.spritesheet('fighter', 'assets/figher1Movement.png', 38, 61);
 }
 
 var player1;
@@ -54,7 +53,7 @@ function create() {
     ledge.body.immovable = true;
 
     // The player1 and its settings
-    player1 = game.add.sprite(32, game.world.height - 150, 'dude');
+    player1 = game.add.sprite(32, game.world.height - 150, 'fighter');
     player2 = game.add.sprite(32, game.world.height - 550, 'dude');
 
     //  We need to enable physics on the player1
@@ -71,11 +70,11 @@ function create() {
     player2.body.collideWorldBounds = true;
 
     //  Our two animations, walking left and right.
-    player1.animations.add('left', [0, 1, 2, 3], 10, true);
-    player1.animations.add('right', [5, 6, 7, 8], 10, true);
+    player1.animations.add('left', [0, 1, 2], 10, true);
+    player1.animations.add('right', [3, 4, 5], 10, true);
 
-    player2.animations.add('left', [0, 1, 2, 3], 10, true);
-    player2.animations.add('right', [5, 6, 7, 8], 10, true);
+    player2.animations.add('left', [3, 4, 5], 10, true);
+    player2.animations.add('right', [0, 1, 2], 10, true);
 
     //  Finally some stars to collect
     stars = game.add.group();
@@ -113,6 +112,7 @@ function update() {
     //  Collide the player1 and the stars with the platforms
     var hitPlatform = game.physics.arcade.collide(player1, platforms);
     hitPlatform = game.physics.arcade.collide(player2, platforms);
+    hitPlatform = game.physics.arcade.collide(player1, player2);
     // var hitPlayers = game.physics.arcade.collide(player1,player2)
     //????????????????????????????
 

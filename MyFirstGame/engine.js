@@ -99,9 +99,10 @@ function create() {
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
     //  Our controls.
+    
     cursors = game.input.keyboard.createCursorKeys();
     cursors = game.input.keyboard.addKeys( { 'up': Phaser.Keyboard.W, 'down': Phaser.Keyboard.S, 'left': Phaser.Keyboard.A, 'right': Phaser.Keyboard.D } );
-
+    
 }
 
 function update() {
@@ -109,7 +110,7 @@ function update() {
     //  Collide the player1 and the stars with the platforms
     var hitPlatform = game.physics.arcade.collide(player1, platforms);
         hitPlatform = game.physics.arcade.collide(player2, platforms);
-   // var hitPlayers = game.physics.arcade.collide(player1,player2)
+   var hitPlayers = game.physics.arcade.collide(player1,player2)
 //????????????????????????????
 
     game.physics.arcade.collide(stars, platforms);
@@ -161,12 +162,13 @@ function update() {
 
 
     //  Allow the player1 to jump if they are touching the ground.
-    // if (keyUp.isDown && player2.body.touching.down && hitPlatform) {
-    //     player2.body.velocity.y = -350;
-    // }
-    if (cursors.up.isDown && player1.body.touching.down && hitPlatform) {
-        player1.body.velocity.y = -350;
-    }
+     
+     if (cursors.up.isDown && player1.body.touching.down && hitPlatform) {
+         player1.body.velocity.y = -350;
+     }
+      if (keyUP.isDown && player2.body.touching.down && hitPlatform) {
+          player2.body.velocity.y = -350;
+     }
 
 }
 

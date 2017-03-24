@@ -5,18 +5,18 @@ function preload() {
     game.load.image('mortal', 'assets/mortal.jpg');
     game.load.image('ground', 'assets/platform.jpg');
     game.load.image('star', 'assets/star.png');
-    //Dude 1
+    //Dude1
     game.load.spritesheet('dude', 'assets/enemy.png', 38.5, 56);
     //Dude2
     game.load.spritesheet('fighter', 'assets/figher1Movement.png', 38, 61);
 }
 
-var player1;
-var player2;
+var player1,
+    player2;
 
-var platforms;
-var cursors;
-var cursors2;
+var platforms,
+    cursors,
+    cursors2;
 
 var stars;
 var score = 0;
@@ -52,15 +52,15 @@ function create() {
     ledge = platforms.create(-150, 250, 'ground');
     ledge.body.immovable = true;
 
-    // The player1 and its settings
+    // The players and their settings
     player1 = game.add.sprite(32, game.world.height - 150, 'fighter');
     player2 = game.add.sprite(32, game.world.height - 550, 'dude');
 
-    //  We need to enable physics on the player1
+    //  We need to enable physics on the players
     game.physics.arcade.enable(player1);
     game.physics.arcade.enable(player2);
 
-    //  player1 physics properties. Give the little guy a slight bounce.
+    //  Players physics properties. Give the little guys a slight bounce.
     player1.body.bounce.y = 0.2;
     player1.body.gravity.y = 300;
     player1.body.collideWorldBounds = true;
@@ -100,11 +100,12 @@ function create() {
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
 
-    keyLeft = game.input.keyboard.addKey(Phaser.Keyboard.A);
-    keyRight = game.input.keyboard.addKey(Phaser.Keyboard.D);
-    keyUP = game.input.keyboard.addKey(Phaser.Keyboard.W);
-    keyDOWN = game.input.keyboard.addKey(Phaser.Keyboard.S);
-
+    cursors2 = {
+        'keyLeft': game.input.keyboard.addKey(Phaser.Keyboard.A),
+        'keyRight': game.input.keyboard.addKey(Phaser.Keyboard.D),
+        'keyUP': game.input.keyboard.addKey(Phaser.Keyboard.W),
+        'keyDOWN': game.input.keyboard.addKey(Phaser.Keyboard.S)
+    };
 }
 
 function update() {
@@ -119,45 +120,41 @@ function update() {
     game.physics.arcade.collide(stars, platforms);
     // game.physics.arcade.collide(player1,player2)
 
-    //  Checks to see if the player1 overlaps with any of the stars, if he does call the collectStar function
+    //  Checks to see if the players overlap with any of the stars, if he does call the collectStar function
     game.physics.arcade.overlap(player1, stars, collectStar, null, this);
     game.physics.arcade.overlap(player2, stars, collectStar, null, this);
 
-    //  Reset the player1s velocity (movement)
+    //  Reset the players velocity (movement)
     player1.body.velocity.x = 0;
     player2.body.velocity.x = 0;
-    //cursors.addKeys(W,A,S,D);
 
-    if (keyLeft.isDown) {
-        player2.body.velocity.x = -150;
-
-        player2.animations.play('left');
-    } else if (keyRight.isDown) {
-        //  Move to the right
-        player2.body.velocity.x = 150;
-
-        player2.animations.play('right');
-    } else {
-        //  Stand still
-        player2.animations.stop();
-
-        player2.frame = 4;
-    }
+    // Player1 controls
     if (cursors.left.isDown) {
         //  Move to the left
         player1.body.velocity.x = -150;
-
         player1.animations.play('left');
     } else if (cursors.right.isDown) {
         //  Move to the right
         player1.body.velocity.x = 150;
-
         player1.animations.play('right');
     } else {
         //  Stand still
         player1.animations.stop();
-
         player1.frame = 4;
+    }
+
+    // Player2 controls
+    if (cursors2.keyLeft.isDown) {
+        player2.body.velocity.x = -150;
+        player2.animations.play('left');
+    } else if (cursors2.keyRight.isDown) {
+        //  Move to the right
+        player2.body.velocity.x = 150;
+        player2.animations.play('right');
+    } else {
+        //  Stand still
+        player2.animations.stop();
+        player2.frame = 4;
     }
 
 
@@ -169,11 +166,10 @@ function update() {
         player1.body.velocity.y = -350;
     }
 
-    if (keyUP.isDown && player2.body.touching.down) {
+    if (cursors2.keyUP.isDown && player2.body.touching.down) {
         player2.body.velocity.y = -350;
     }
-
-}
+} // end of update()
 
 function collectStar(player1, star) {
 
@@ -183,5 +179,4 @@ function collectStar(player1, star) {
     //  Add and update the score
     score += 10;
     scoreText.text = 'Score: ' + score;
-
 }

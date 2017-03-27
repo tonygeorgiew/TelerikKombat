@@ -54,6 +54,11 @@ wrapper.addEventListener('click', function(event) {
             window.location = './MortalCombatSky.html';
         }
     }
+
+    //When Exit button is pressed
+    if (target.className == 'menu-item-content' && target.innerHTML == "EXIT") {
+        window.close();
+    }
 });
 
 backButton.addEventListener('click', function() {
@@ -69,3 +74,10 @@ chosseOtherButton.addEventListener('click', function() {
         canClick = true;
     }
 });
+
+function Exit() {
+    var x = confirm('Are You sure want to exit:');
+    if (x) {
+        window.close()
+    };
+}

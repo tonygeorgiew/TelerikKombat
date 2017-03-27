@@ -1,104 +1,71 @@
-// Resource page http://www.iguanademos.com/Jare/docs/html5/Lessons/Lesson4/
+let wrapper = document.getElementById('wrapper');
+let mainContainer = document.getElementsByClassName('main-menu-container')[0];
+let backgroundMenu = document.getElementsByClassName('backgrounds-container')[0];
+let mainBackground = document.getElementsByClassName('menu-starting-img')[0];
+let backButton = document.getElementById('back');
+let chosseOtherButton = document.getElementById('chose-different');
+let imageContainer = document.getElementsByClassName('background-imgs-container')[0];
+let images = imageContainer.getElementsByTagName('td');
+let canClick = true;
+let site = 'MortalCombat.html';
 
-Menu = function(title, items, footer, y, size, width, callback, backgroundCallback)
-{
-	this.title = title;
-	this.items = items;
-	this.footer = footer;
-	this.selectedItem = 0;
-	this.callback = callback;
-	this.y = y;
-	this.size = size;
-	this.width = width;
-	this.backgroundCallback = backgroundCallback;
-}
+//set default background for game
+let imgSrc = mainBackground.src;
 
-Menu.prototype.constructor = Menu;
+const RESULT_IMG = {
+    src: imgSrc
+};
 
-Menu.prototype.Render = function(elapsed)
-{
-	if (this.backgroundCallback)
-		this.backgroundCallback(elapsed);
-	else
-	{
-		var lingrad = ctx.createLinearGradient(0,0,0,canvas.height);
-		lingrad.addColorStop(0, '#000');
-		lingrad.addColorStop(1, '#023');
-		ctx.fillStyle = lingrad;
-		ctx.fillRect(0,0,canvas.width, canvas.height);
-	}
-	
-	ctx.textAlign = "center";
-	ctx.fillStyle = "White";
+wrapper.addEventListener('click', function(event) {
+    let target = event.target;
 
-	var y = this.y;
-	if (this.title)
-	{
-		ctx.font = Math.floor(this.size*1.3).toString() + "px Times New Roman";
-		ctx.fillText(this.title, canvas.width/2, y);
-		y += this.size;
-	}
+    //When clicked on button "CHOOSE BACKGROUND"
+    if (target.className == 'menu-item-content' && target.innerHTML == "CHOOSE BACKGROUND") {
+        mainContainer.className += ' hidden';
+        mainBackground.src = '../Telerik-Combat/assets/menu/background.jpg'
+        backgroundMenu.style.display = 'block';
+    }
 
-	for (var i = 0; i < this.items.length; ++i)
-	{
-		var size = Math.floor(this.size*0.8);
-		if (i == this.selectedItem)
-		{
-			var v = Math.floor(127*Math.sin(GameLoopManager.lastTime*0.04) + 127);
-			ctx.fillStyle = "rgba(255,255,"+v.toString()+",255)";
-			size = this.size;
-		}
-		ctx.font = size.toString() + "px Times New Roman";
-		y += this.size;
-		ctx.fillText(this.items[i], canvas.width/2, y);
-		ctx.fillStyle = "White";
-	}
-	if (this.footer)
-	{
-		ctx.textAlign = "right";
-		ctx.font = "14px Times New Roman";
-		ctx.fillText(this.footer, canvas.width-1, canvas.height-3);
-	}
-}	
+    //WHEN clicked on image to choose what the background must be
+    if (target.className == 'background-img' && canClick == true) {
 
-Menu.prototype.Input = function(elapsed)
-{
-	InputManager.padUpdate();
-	if (InputManager.padPressed & InputManager.PAD.OK)
-	{
-		AudioManager.play("select");
-		this.callback(this.selectedItem);
-		return;
-	}
-	if (InputManager.padPressed & InputManager.PAD.CANCEL)
-	{
-		this.callback(-1);
-		return;
-	}
-	var prevSelected = this.selectedItem;
-	if (InputManager.padPressed & InputManager.PAD.UP)
-		this.selectedItem = (this.selectedItem + this.items.length - 1) % this.items.length;
-	if (InputManager.padPressed & InputManager.PAD.DOWN)
-		this.selectedItem = (this.selectedItem + 1) % this.items.length;
+        //get img src
+        RESULT_IMG.src = target.src;
+        let parent = target.parentElement;
+        parent.style.backgroundColor = 'rebeccapurple';
+        canClick = false;
+    }
 
-	var leftx = (canvas.width - this.width)/2;
-	if (InputManager.lastMouseX >= leftx && InputManager.lastMouseX < leftx+this.width)
-	{
-		var y = this.y + this.size*0.2; // Adjust for baseline
-		if (this.title)
-			y += this.size;
-		if (InputManager.lastMouseY >= y && InputManager.lastMouseY < (y + this.size*this.items.length))
-			this.selectedItem = Math.floor((InputManager.lastMouseY - y)/this.size);
-	}
-	if (prevSelected != this.selectedItem)
-	{
-		AudioManager.play("blip");
-	}
-}	
+    //When new game pressed
+    if (target.className == 'menu-item-content' && target.innerHTML == "NEW GAME") {
+        if (RESULT_IMG.src.includes('apocalypse-1.jpg')) {
+            window.location = './MortalCombatApocalypse.html';
+        }
+        if (RESULT_IMG.src.includes('dungeon-2.jpg')) {
+            window.location = './MortalCombatDungeonTwo.html';
+        }
+        if (RESULT_IMG.src.includes('dungeon-one.jpg')) {
+            window.location = './MortalCombatDungeonOne.html';
+        }
+        if (RESULT_IMG.src.includes('mortal.jpg')) {
+            window.location = './MortalCombat.html';
+        }
+        if (RESULT_IMG.src.includes('sky.png')) {
+            window.location = './MortalCombatSky.html';
+        }
+    }
+});
 
-Menu.prototype.Tick = function(elapsed)
-{
-	fps.update(elapsed);
-	this.Input(elapsed);
-	this.Render(elapsed);
-}
+backButton.addEventListener('click', function() {
+    backgroundMenu.style.display = 'none';
+    mainBackground.src = '../Telerik-Combat/assets/menu/Mortal-Kombat.jpg'
+    mainContainer.classList.remove('hidden');
+});
+
+chosseOtherButton.addEventListener('click', function() {
+    for (let i = 0; i < images.length; i += 1) {
+        let currentTD = images[i];
+        currentTD.style.backgroundColor = 'transparent';
+        canClick = true;
+    }
+});

@@ -7,7 +7,6 @@ let chosseOtherButton = document.getElementById('chose-different');
 let imageContainer = document.getElementsByClassName('background-imgs-container')[0];
 let images = imageContainer.getElementsByTagName('td');
 let canClick = true;
-let site = 'MortalCombat.html';
 
 //set default background for game
 let imgSrc = mainBackground.src;
@@ -22,7 +21,7 @@ wrapper.addEventListener('click', function(event) {
     //When clicked on button "CHOOSE BACKGROUND"
     if (target.className == 'menu-item-content' && target.innerHTML == "CHOOSE BACKGROUND") {
         mainContainer.className += ' hidden';
-        mainBackground.src = '../Telerik-Combat/assets/menu/background.jpg'
+        mainBackground.src = '../GameCore/assets/menu/background.jpg'
         backgroundMenu.style.display = 'block';
     }
 
@@ -39,19 +38,18 @@ wrapper.addEventListener('click', function(event) {
     //When new game pressed
     if (target.className == 'menu-item-content' && target.innerHTML == "NEW GAME") {
         if (RESULT_IMG.src.includes('apocalypse-1.jpg')) {
-            window.location = './MortalCombatApocalypse.html';
-        }
+            window.location = '../GameCore/MortalCombatApocalypse.html';
+        } else
         if (RESULT_IMG.src.includes('dungeon-2.jpg')) {
-            window.location = './MortalCombatDungeonTwo.html';
-        }
-        if (RESULT_IMG.src.includes('dungeon-one.jpg')) {
-            window.location = './MortalCombatDungeonOne.html';
-        }
-        if (RESULT_IMG.src.includes('mortal.jpg')) {
-            window.location = './MortalCombat.html';
-        }
-        if (RESULT_IMG.src.includes('sky.png')) {
-            window.location = './MortalCombatSky.html';
+            window.location = '../GameCore/MortalCombatDungeonTwo.html';
+        } else if (RESULT_IMG.src.includes('assets/backgrounds/dungeon-one.jpg')) {
+            window.location = "../GameCore/MortalCombatDungeonOne.html";
+        } else if (RESULT_IMG.src.includes('mortal.jpg')) {
+            window.location = '../GameCore/MortalCombat.html';
+        } else if (RESULT_IMG.src.includes('sky.png')) {
+            window.location = '../GameCore/MortalCombatSky.html';
+        } else {
+            window.location = '../GameCore/MortalCombat.html';
         }
     }
 
@@ -63,7 +61,7 @@ wrapper.addEventListener('click', function(event) {
 
 backButton.addEventListener('click', function() {
     backgroundMenu.style.display = 'none';
-    mainBackground.src = '../Telerik-Combat/assets/menu/Mortal-Kombat.jpg'
+    mainBackground.src = './assets/menu/Mortal-Kombat.jpg'
     mainContainer.classList.remove('hidden');
 });
 

@@ -8,7 +8,7 @@ function preload() {
     game.load.image('ground', 'assets/grounds/platform.jpg');
     game.load.image('star', 'assets/items/star.png');
     //Dude 1
-    game.load.spritesheet('dude', 'assets/heroes/enemy.png', 38.5, 56);
+    game.load.spritesheet('dude', 'assets/heroes/enemy.png', 38.1, 56);
     //Dude2
     game.load.spritesheet('fighter', 'assets/heroes/figher1Movement.png', 38, 61);
 }
@@ -23,6 +23,8 @@ var cursors2;
 var stars;
 var score = 0;
 var scoreText;
+var bonus = 0;
+var bonusPlayer2 = 0;
 
 function create() {
 
@@ -128,39 +130,45 @@ function update() {
     //  Reset the player1s velocity (movement)
     player1.body.velocity.x = 0;
     player2.body.velocity.x = 0;
-    //cursors.addKeys(W,A,S,D);
 
+    //cursors.addKeys(W,A,S,D);
     if (keyLeft.isDown) {
         player2.body.velocity.x = -150;
 
+        bonusPlayer2 = 0;
         player2.animations.play('left');
     } else if (keyRight.isDown) {
+
         //  Move to the right
         player2.body.velocity.x = 150;
 
+        bonusPlayer2 = -1;
         player2.animations.play('right');
     } else {
         //  Stand still
         player2.animations.stop();
 
-        player2.frame = 4;
+        player2.frame = 3 + bonusPlayer2;
     }
 
+    //left up down right arrow keys
     if (cursors.left.isDown) {
         //  Move to the left
         player1.body.velocity.x = -150;
 
+        bonus = -1;
         player1.animations.play('left');
     } else if (cursors.right.isDown) {
         //  Move to the right
         player1.body.velocity.x = 150;
 
+        bonus = 0;
         player1.animations.play('right');
     } else {
         //  Stand still
         player1.animations.stop();
 
-        player1.frame = 4;
+        player1.frame = 3 + bonus;
     }
 
 

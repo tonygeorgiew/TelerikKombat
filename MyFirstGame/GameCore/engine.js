@@ -2,12 +2,12 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 
 
 function preload() {
-    let imageSrc = document.getElementsByTagName('div')[0].className;
+    var imageSrc = document.getElementsByTagName('div')[0].className;
 
     game.load.image('mortal', 'assets/backgrounds/' + imageSrc);
     game.load.image('ground', 'assets/grounds/platform.jpg');
     game.load.image('star', 'assets/items/firstaid.png');
-    //Dude 1
+    //Dude1
     game.load.spritesheet('dude', 'assets/heroes/enemy.png', 41.41, 63);
     //Dude2
     game.load.spritesheet('fighter', 'assets/heroes/figher1Movement.png', 40.5, 61);
@@ -111,8 +111,8 @@ function create() {
     }
 
     //  The score
-    scoreText = game.add.text(40, 16, 'score: 100', { fontSize: '32px', fill: '#FFF' });
-    scoreText2 = game.add.text(600, 16, 'score: 100', { fontSize: '32px', fill: '#FFF' });
+    scoreText = game.add.text(40, 16, '|'.repeat(score/5), { fontSize: '32px', fill: '#FFF' });
+    scoreText2 = game.add.text(600, 16, '|'.repeat(score2/5), { fontSize: '32px', fill: '#FFF' });
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -177,7 +177,7 @@ function update() {
                 scoreText2.text = 'Player 2 Win!';
                 game.paused = true;
             } else {
-                scoreText.text = 'Score: ' + score;
+                scoreText.text = '|'.repeat(score/5);
             }
         }
     } else {
@@ -222,7 +222,7 @@ function update() {
                 scoreText.text = 'Player 1 Wins!';
                 game.paused = true;
             } else {
-                scoreText2.text = 'Score: ' + score2;
+                scoreText2.text = '|'.repeat(score2/5);
             }
         }
     } else {
@@ -264,7 +264,7 @@ function collectStar(player1, star) {
     //  Add and update the score
     score += 10;
 
-    scoreText.text = 'Score: ' + score;
+    scoreText.text = '|'.repeat(score/5);
 
 }
 
@@ -276,6 +276,6 @@ function collectStar2(player2, star) {
     //  Add and update the score
     score2 += 10;
 
-    scoreText2.text = 'Score: ' + score2;
+    scoreText2.text = '|'.repeat(score2/5);
 
 }

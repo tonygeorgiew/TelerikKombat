@@ -6,11 +6,11 @@ function preload() {
 
     game.load.image('mortal', 'assets/backgrounds/' + imageSrc);
     game.load.image('ground', 'assets/grounds/platform.jpg');
-    game.load.image('star', 'assets/items/star.png');
+    game.load.image('star', 'assets/items/firstaid.png');
     //Dude 1
-    game.load.spritesheet('dude', 'assets/heroes/enemy.png', 38.1, 56);
+    game.load.spritesheet('dude', 'assets/heroes/enemy.png', 41.41, 63);
     //Dude2
-    game.load.spritesheet('fighter', 'assets/heroes/figher1Movement.png', 38, 61);
+    game.load.spritesheet('fighter', 'assets/heroes/figher1Movement.png', 40.5, 61);
 }
 
 var player1;
@@ -21,10 +21,15 @@ var cursors;
 var cursors2;
 
 var stars;
-var score = 0;
+var score = 100;
+var score2 = 100;
 var scoreText;
 var bonus = 0;
 var bonusPlayer2 = 0;
+var facing = 'left';
+
+var w = 800,
+    h = 600;
 
 function create() {
 
@@ -74,12 +79,18 @@ function create() {
     player2.body.collideWorldBounds = true;
 
     //  Our two animations, walking left and right.
-    player1.animations.add('left', [0, 1, 2], 10, true);
+    player1.animations.add('left', [2, 1, 0], 10, true);
     player1.animations.add('right', [3, 4, 5], 10, true);
 
     player2.animations.add('left', [3, 4, 5], 10, true);
     player2.animations.add('right', [0, 1, 2], 10, true);
 
+    // Our two animantions, fighting
+    player1.animations.add('fightRight', [11, 3], 10);
+    player1.animations.add('fightLeft', [6, 2], 10);
+
+    player2.animations.add('enemyFightRight', [11, 0], 10);
+    player2.animations.add('enemyFightLeft', [6, 5], 10);
     //  Finally some stars to collect
     stars = game.add.group();
 
@@ -88,19 +99,20 @@ function create() {
 
     //  Here we'll create 12 of them evenly spaced apart
     for (var i = 0; i < 12; i++) {
+        var r = Math.random();
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 70, 0, 'star');
+        var star = stars.create((r * 10) * 90, 40, 'star');
 
         //  Let gravity do its thing
         star.body.gravity.y = 300;
 
         //  This just gives each star a slightly random bounce value
-        star.body.bounce.y = 0.7 + Math.random() * 0.2;
+        star.body.bounce.y = 0.9 + Math.random() * 0.2;
     }
 
     //  The score
-    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-
+    scoreText = game.add.text(40, 16, 'score: 100', { fontSize: '32px', fill: '#FFF' });
+    scoreText2 = game.add.text(600, 16, 'score: 100', { fontSize: '32px', fill: '#FFF' });
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -108,7 +120,8 @@ function create() {
     keyRight = game.input.keyboard.addKey(Phaser.Keyboard.D);
     keyUP = game.input.keyboard.addKey(Phaser.Keyboard.W);
     keyDOWN = game.input.keyboard.addKey(Phaser.Keyboard.S);
-
+    keyFight1 = game.input.keyboard.addKey(Phaser.Keyboard.M);
+    keyFightEnemy = game.input.keyboard.addKey(Phaser.Keyboard.F);
 }
 
 function update() {
@@ -116,7 +129,9 @@ function update() {
     //  Collide the player1 and the stars with the platforms
     var hitPlatform = game.physics.arcade.collide(player1, platforms);
     hitPlatform = game.physics.arcade.collide(player2, platforms);
-    hitPlatform = game.physics.arcade.collide(player1, player2);
+
+    //make player colide !!!!!!!!!!!!!!!!!!!! REMOVEDDD
+    // hitPlatform = game.physics.arcade.collide(player1, player2);
     // var hitPlayers = game.physics.arcade.collide(player1,player2)
     //????????????????????????????
 
@@ -125,11 +140,13 @@ function update() {
 
     //  Checks to see if the player1 overlaps with any of the stars, if he does call the collectStar function
     game.physics.arcade.overlap(player1, stars, collectStar, null, this);
-    game.physics.arcade.overlap(player2, stars, collectStar, null, this);
+    game.physics.arcade.overlap(player2, stars, collectStar2, null, this);
+    //game.physics.arcade.overlap(player2, player1, collectStar2, null, this);
 
     //  Reset the player1s velocity (movement)
     player1.body.velocity.x = 0;
     player2.body.velocity.x = 0;
+
 
     //cursors.addKeys(W,A,S,D);
     if (keyLeft.isDown) {
@@ -144,6 +161,25 @@ function update() {
 
         bonusPlayer2 = -1;
         player2.animations.play('right');
+    } else if (keyFightEnemy.isDown) {
+        if (player2.frame == 2) {
+            player2.animations.play('enemyFightRight');
+        }
+        if (player2.frame == 3) {
+            player2.animations.play('enemyFightLeft');
+        }
+
+        if (Math.abs(player1.body.position.x - player2.body.position.x) < 27) {
+
+            score -= 1;
+            if (score <= 0) {
+                scoreText.text = 'Player 1 Lose!';
+                scoreText2.text = 'Player 2 Win!';
+                game.paused = true;
+            } else {
+                scoreText.text = 'Score: ' + score;
+            }
+        }
     } else {
         //  Stand still
         player2.animations.stop();
@@ -156,20 +192,54 @@ function update() {
         //  Move to the left
         player1.body.velocity.x = -150;
 
-        bonus = -1;
-        player1.animations.play('left');
+        if (facing != 'left') {
+            player1.animations.play('left');
+            facing = 'left';
+        }
     } else if (cursors.right.isDown) {
         //  Move to the right
         player1.body.velocity.x = 150;
 
-        bonus = 0;
-        player1.animations.play('right');
+        if (facing != 'right') {
+            player1.animations.play('right');
+            facing = 'right';
+        }
+    } else if (keyFight1.isDown) {
+
+        if (player1.frame == 3) {
+            player1.animations.play('fightRight');
+        }
+
+        if (player1.frame == 0) {
+            player1.animations.play('fightLeft');
+        }
+
+        if (Math.abs(player1.body.position.x - player2.body.position.x) < 25) {
+            score2 -= 10;
+
+            if (score2 <= 0) {
+                scoreText2.text = 'Player 2 Lose!';
+                scoreText.text = 'Player 1 Wins!';
+                game.paused = true;
+            } else {
+                scoreText2.text = 'Score: ' + score2;
+            }
+        }
     } else {
         //  Stand still
-        player1.animations.stop();
+        if (facing != 'idle') {
+            player1.animations.stop();
 
-        player1.frame = 3 + bonus;
+            if (facing == 'left') {
+                player1.frame = 0;
+            } else {
+                player1.frame = 3;
+            }
+
+            facing = 'idle';
+        }
     }
+
 
 
     //  Allow the player1 to jump if they are touching the ground.
@@ -193,6 +263,19 @@ function collectStar(player1, star) {
 
     //  Add and update the score
     score += 10;
+
     scoreText.text = 'Score: ' + score;
+
+}
+
+function collectStar2(player2, star) {
+
+    // Removes the star from the screen
+    star.kill();
+
+    //  Add and update the score
+    score2 += 10;
+
+    scoreText2.text = 'Score: ' + score2;
 
 }

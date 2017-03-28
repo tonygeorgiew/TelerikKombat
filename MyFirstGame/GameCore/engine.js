@@ -24,6 +24,7 @@ var stars;
 var score = 100;
 var score2 = 100;
 var scoreText;
+var proportion = 10; //convert points to health
 var bonus = 0;
 var bonusPlayer2 = 0;
 var facing = 'left';
@@ -111,8 +112,8 @@ function create() {
     }
 
     //  The score
-    scoreText = game.add.text(40, 16, '|'.repeat(score/5), { fontSize: '32px', fill: '#FFF' });
-    scoreText2 = game.add.text(600, 16, '|'.repeat(score2/5), { fontSize: '32px', fill: '#FFF' });
+    scoreText = game.add.text(40, 16, '='.repeat(score/proportion), { fontSize: '32px', fill: '#ff0000' });
+    scoreText2 = game.add.text(600, 16, '='.repeat(score2/proportion), { fontSize: '32px', fill: '#ff0000' });
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -177,7 +178,7 @@ function update() {
                 scoreText2.text = 'Player 2 Win!';
                 game.paused = true;
             } else {
-                scoreText.text = '|'.repeat(score/5);
+                scoreText.text = '-'.repeat(score/proportion);
             }
         }
     } else {
@@ -222,7 +223,7 @@ function update() {
                 scoreText.text = 'Player 1 Wins!';
                 game.paused = true;
             } else {
-                scoreText2.text = '|'.repeat(score2/5);
+                scoreText2.text = '='.repeat(score2/proportion);
             }
         }
     } else {
@@ -264,7 +265,7 @@ function collectStar(player1, star) {
     //  Add and update the score
     score += 10;
 
-    scoreText.text = '|'.repeat(score/5);
+    scoreText.text = '='.repeat(score/proportion);
 
 }
 
@@ -276,6 +277,6 @@ function collectStar2(player2, star) {
     //  Add and update the score
     score2 += 10;
 
-    scoreText2.text = '|'.repeat(score2/5);
+    scoreText2.text = '='.repeat(score2/proportion);
 
 }

@@ -7,10 +7,14 @@ function preload() {
     game.load.image('mortal', 'assets/backgrounds/' + imageSrc);
     game.load.image('ground', 'assets/grounds/platform.jpg');
     game.load.image('star', 'assets/items/firstaid.png');
+    game.load.image('flameLeft', 'assets/skillsNeffects/flameLeft.png',86,100);
+    game.load.image('flameRight', 'assets/skillsNeffects/flameRight.png',86,100);
     //Dude1
     game.load.spritesheet('dude', 'assets/heroes/enemy.png', 41.41, 63);
     //Dude2
     game.load.spritesheet('fighter', 'assets/heroes/figher1Movement.png', 40.5, 61);
+    game.load.spritesheet('blood', 'assets/skillsNeffects/blood.png',112,120);
+
 }
 
 var player1;
@@ -28,6 +32,9 @@ var proportion = 10; //convert points to health
 var bonus = 0;
 var bonusPlayer2 = 0;
 var facing = 'left';
+var flameLeft;
+var flameRight;
+var blood;
 
 var w = 800,
     h = 600;
@@ -89,6 +96,18 @@ function create() {
     // Our two animantions, fighting
     player1.animations.add('fightRight', [11, 3], 10);
     player1.animations.add('fightLeft', [6, 2], 10);
+    //SkillsAndEffects
+    blood = game.add.sprite(4000,4000,'blood');
+    game.physics.arcade.enable(blood);
+    blood.animations.add('bleed');
+
+    flameRight = game.add.group();
+    flameLeft = game.add.group();
+
+    flameRight.enableBody=true;
+    flameLeft.enableBody=true;
+
+
 
     player2.animations.add('enemyFightRight', [11, 0], 10);
     player2.animations.add('enemyFightLeft', [6, 5], 10);
@@ -149,7 +168,19 @@ function update() {
     player2.body.velocity.x = 0;
 
 
+
+
     //cursors.addKeys(W,A,S,D);
+    if(keyDOWN.isDown&&player2.frame<3){
+      var fireBall = flameRight.create(player2.body.x - 30, player2.body.y + 10, 'flameRight');
+      fireBall.body.gravity.y = 0;
+      fireBall.body.gravity.x = -2000;
+    }
+    if(keyDOWN.isDown&&player2.frame>2){
+      var fireBall2 = flameLeft.create(player2.body.x + 30, player2.body.y + 10, 'flameLeft');
+      fireBall2.body.gravity.y = 0;
+      fireBall2.body.gravity.x = 2000;
+    }
     if (keyLeft.isDown) {
         player2.body.velocity.x = -150;
 
@@ -163,10 +194,19 @@ function update() {
         bonusPlayer2 = -1;
         player2.animations.play('right');
     } else if (keyFightEnemy.isDown) {
+      if(Math.abs(player1.body.position.y - player2.body.position.y) < 10){
+      blood.body.x = player2.body.x;
+      blood.body.y = player2.body.y;
+      blood.animations.play('bleed',50,false);
+    }
         if (player2.frame == 2) {
+
             player2.animations.play('enemyFightRight');
+
         }
+
         if (player2.frame == 3) {
+
             player2.animations.play('enemyFightLeft');
         }
 
@@ -183,6 +223,7 @@ function update() {
             }
         }
     } else {
+
         //  Stand still
         player2.animations.stop();
 
@@ -207,12 +248,18 @@ function update() {
             facing = 'right';
         }
     } else if (keyFight1.isDown) {
-
+        if(Math.abs(player1.body.position.y - player2.body.position.y) < 10){
+      blood.body.x = player1.body.x;
+      blood.body.y = player1.body.y;
+      blood.animations.play('bleed',50,false);
+}
         if (player1.frame == 3) {
+
             player1.animations.play('fightRight');
         }
 
         if (player1.frame == 0) {
+
             player1.animations.play('fightLeft');
         }
 
@@ -242,7 +289,17 @@ function update() {
             facing = 'idle';
         }
     }
+    if(cursors.down.isDown&&player1.frame<3){
+      var fireBall = flameRight.create(player1.body.x - 30, player1.body.y + 10, 'flameRight');
+      fireBall.body.gravity.y = 0;
+      fireBall.body.gravity.x = -2000;
 
+  } else if(cursors.down.isDown&&player1.frame>2){
+     var fireBall2 = flameLeft.create(player1.body.x + 30, player1.body.y + 10, 'flameLeft');
+     fireBall2.body.gravity.y = 0;
+     fireBall2.body.gravity.x = 2000;
+
+    }
 
 
     //  Allow the player1 to jump if they are touching the ground.

@@ -112,8 +112,8 @@ function create() {
     }
 
     //  The score
-    scoreText = game.add.text(40, 16, '='.repeat(score/proportion), { fontSize: '32px', fill: '#ff0000' });
-    scoreText2 = game.add.text(600, 16, '='.repeat(score2/proportion), { fontSize: '32px', fill: '#ff0000' });
+    scoreText = game.add.text(40, 16, '='.repeat(score / proportion), { fontSize: '32px', fill: '#ff0000' });
+    scoreText2 = game.add.text(600, 16, '='.repeat(score2 / proportion), { fontSize: '32px', fill: '#ff0000' });
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -170,15 +170,16 @@ function update() {
             player2.animations.play('enemyFightLeft');
         }
 
-        if (Math.abs(player1.body.position.x - player2.body.position.x) < 27) {
+        if (Math.abs(player1.body.position.x - player2.body.position.x) < 32 &&
+            Math.abs(player1.body.position.y - player2.body.position.y) < 10) {
 
             score -= 1;
             if (score <= 0) {
-                scoreText.text = 'Player 1 Lose!';
-                scoreText2.text = 'Player 2 Win!';
+                scoreText.text = 'Hero Lose!';
+                scoreText2.text = 'Enemy Win!';
                 game.paused = true;
             } else {
-                scoreText.text = '-'.repeat(score/proportion);
+                scoreText.text = '-'.repeat(score / proportion);
             }
         }
     } else {
@@ -215,15 +216,16 @@ function update() {
             player1.animations.play('fightLeft');
         }
 
-        if (Math.abs(player1.body.position.x - player2.body.position.x) < 25) {
+        if (Math.abs(player1.body.position.x - player2.body.position.x) < 32 &&
+            Math.abs(player1.body.position.y - player2.body.position.y) < 10) {
             score2 -= 10;
 
             if (score2 <= 0) {
-                scoreText2.text = 'Player 2 Lose!';
-                scoreText.text = 'Player 1 Wins!';
+                scoreText2.text = 'Enemy Lose!';
+                scoreText.text = 'Hero Wins!';
                 game.paused = true;
             } else {
-                scoreText2.text = '='.repeat(score2/proportion);
+                scoreText2.text = '='.repeat(score2 / proportion);
             }
         }
     } else {
@@ -265,7 +267,7 @@ function collectStar(player1, star) {
     //  Add and update the score
     score += 10;
 
-    scoreText.text = '='.repeat(score/proportion);
+    scoreText.text = '='.repeat(score / proportion);
 
 }
 
@@ -277,6 +279,6 @@ function collectStar2(player2, star) {
     //  Add and update the score
     score2 += 10;
 
-    scoreText2.text = '='.repeat(score2/proportion);
+    scoreText2.text = '='.repeat(score2 / proportion);
 
 }

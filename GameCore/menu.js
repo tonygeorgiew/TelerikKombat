@@ -6,36 +6,81 @@ let backButton = document.getElementById('back');
 let chosseOtherButton = document.getElementById('chose-different');
 let imageContainer = document.getElementsByClassName('background-imgs-container')[0];
 let images = imageContainer.getElementsByTagName('td');
+let creditsMenu = document.getElementsByClassName('credits-menu')[0];
+let creditsBackButton = document.getElementById('credits-back');
 let canClick = true;
+let previousTarget;
+let clickedChooseHeroButton;
 
-//set default background for game
+
+// set default background for game
 let imgSrc = mainBackground.src;
 
+// save img source
 const RESULT_IMG = {
     src: imgSrc
 };
 
+creditsBackButton.addEventListener('click', function(event) {
+
+    if (previousTarget != undefined) {
+        previousTarget.style.color = '';
+    }
+
+    mainContainer.classList.remove('hidden');
+    mainBackground.src = './assets/menu/Mortal-Kombat.jpg';
+    creditsMenu.style.display = 'none';
+});
+
 wrapper.addEventListener('click', function(event) {
+
+    //Choose hero
+    if (clickedChooseHeroButton != undefined) {
+        clickedChooseHeroButton.innerHTML = 'CHOOSE HERO';
+        clickedChooseHeroButton.style.color = '';
+    }
+
     let target = event.target;
 
-    //When clicked on button "CHOOSE BACKGROUND"
-    if (target.className == 'menu-item-content' && target.innerHTML == "CHOOSE BACKGROUND") {
+    // change color of pressed button
+    target.style.color = 'yellow';
+    previousTarget = target;
+
+    // When clicked controls
+    if (target.className == 'menu-item-content' && target.innerHTML == "CONTROLS") {
+        mainContainer.className += ' hidden';
+        mainBackground.src = '../GameCore/assets/menu/background.jpg'
+        creditsMenu.style.display = 'block';
+    }
+
+    // When clicked choose hero
+    if (target.className == 'menu-item-content' && target.innerHTML == "CHOOSE HERO") {
+        target.innerHTML = 'COMING SOON...';
+        target.style.color = 'purple';
+        clickedChooseHeroButton = target;
+    }
+
+    // When clicked on button "CHOOSE BACKGROUND"
+    if (target.className == 'menu-item-content' && (target.innerHTML == "CHOOSE BACKGROUND" ||
+            target.innerHTML == "OTHER BACKGROUND")) {
+        target.innerHTML = 'OTHER BACKGROUND';
+        target.style.color = 'purple';
         mainContainer.className += ' hidden';
         mainBackground.src = '../GameCore/assets/menu/background.jpg'
         backgroundMenu.style.display = 'block';
     }
 
-    //WHEN clicked on image to choose what the background must be
+    // WHEN clicked on image to choose what the background must be
     if (target.className == 'background-img' && canClick == true) {
 
-        //get img src
+        // get img src
         RESULT_IMG.src = target.src;
         let parent = target.parentElement;
         parent.style.backgroundColor = 'rebeccapurple';
         canClick = false;
     }
 
-    //When new game pressed
+    // When new game pressed
     if (target.className == 'menu-item-content' && target.innerHTML == "NEW GAME") {
         if (RESULT_IMG.src.includes('apocalypse-1.jpg')) {
             window.location = '../GameCore/MortalCombatApocalypse.html';
@@ -53,13 +98,19 @@ wrapper.addEventListener('click', function(event) {
         }
     }
 
-    //When Exit button is pressed
+    // When Exit button is pressed
     if (target.className == 'menu-item-content' && target.innerHTML == "EXIT") {
         window.close();
     }
 });
 
 backButton.addEventListener('click', function() {
+
+    // change buttons color
+    if (previousTarget != undefined) {
+        previousTarget.style.color = 'yellowgreen';
+    }
+
     backgroundMenu.style.display = 'none';
     mainBackground.src = './assets/menu/Mortal-Kombat.jpg'
     mainContainer.classList.remove('hidden');

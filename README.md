@@ -1,9 +1,10 @@
-###Telerik Kombat
+Telerik Kombat
+
 ![telerik_kombat_logo](https://cloud.githubusercontent.com/assets/5516718/24459486/5d948f46-14a4-11e7-933d-8dff22418ab0.png)
 
 Team French-75
 
-#Telerik Kombat
+Telerik Kombat
 Combat multiplayer game. 
 Main purpose of the game: Collect more points and kill your opponent!
 

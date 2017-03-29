@@ -8,7 +8,7 @@ Telerik Kombat
 Combat multiplayer game. 
 Main purpose of the game: Collect more points and kill your opponent!
 
-#Player one controls :
+#### Player one controls :
 
 Moves:
 ```
@@ -19,7 +19,7 @@ Right - kye D
 
 Fight - key F
 ```
-#Player two controls:
+#### Player two controls:
 
 Moves:
 ```

@@ -28,6 +28,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: 700;
+    
     color: yellowgreen;
     width: 230px;
     font-family: "Comic Sans MS", cursive, sans-serif;
@@ -35,12 +36,13 @@
 }
 
 .menu-item-content {
-    font-size: 12px;
+    font-size: 15px;
     padding-left: 16px;
+     text-shadow: 2px 2px black;
 }
 
 .menu-item-content:hover {
-    font-size: 14px;
+    font-size: 18px;
     color: red;
 }
 
@@ -123,4 +125,7 @@
 
 #credits-back {
     position: absolute;
+    top: 550px;
+    left: 50px;
+    color: yellowgreen;
 }

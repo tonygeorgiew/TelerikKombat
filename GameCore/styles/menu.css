@@ -44,6 +44,7 @@
 .menu-item-content:hover {
     font-size: 18px;
     color: red;
+    cursor: pointer;
 }
 
 .menu-item-content .purple {

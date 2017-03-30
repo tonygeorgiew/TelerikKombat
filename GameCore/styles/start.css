@@ -11,6 +11,7 @@ body {
     background-color: transparent;
     border: 5px solid greenyellow;
     box-shadow: 5px 5px 25px lightgoldenrodyellow;
+    cursor: pointer;
 }
 
 .innerButton {

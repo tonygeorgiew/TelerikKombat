@@ -9,6 +9,8 @@ function preload() {
     game.load.image('star', 'assets/items/firstaid.png');
     game.load.image('flameLeft', 'assets/skillsNeffects/flameLeft.png',86,100);
     game.load.image('flameRight', 'assets/skillsNeffects/flameRight.png',86,100);
+    game.load.image('buttonRestart', 'assets/items/newGame.png');
+    game.load.image('buttonBack', 'assets/items/backMenu.png');
     //Dude1
     game.load.spritesheet('dude', 'assets/heroes/enemy.png', 41.41, 63);
     //Dude2
@@ -155,6 +157,12 @@ function update() {
     // var hitPlayers = game.physics.arcade.collide(player1,player2)
     //????????????????????????????
 
+    // Creates new game button
+    var buttonNewGame= game.add.button(270,150, 'buttonRestart', startNewGame, this);
+    buttonNewGame.visible=false;
+
+    var buttonBack= game.add.button(270,280, 'buttonBack', backToMenu, this);
+    buttonBack.visible=false;
     game.physics.arcade.collide(stars, platforms);
     // game.physics.arcade.collide(player1,player2)
 
@@ -166,9 +174,6 @@ function update() {
     //  Reset the player1s velocity (movement)
     player1.body.velocity.x = 0;
     player2.body.velocity.x = 0;
-
-
-
 
     //cursors.addKeys(W,A,S,D);
     if(keyDOWN.isDown&&player2.frame<3){
@@ -217,7 +222,9 @@ function update() {
             if (score <= 0) {
                 scoreText.text = 'Hero Lose!';
                 scoreText2.text = 'Enemy Win!';
-                game.paused = true;
+                buttonNewGame.visible=true;
+                buttonBack.visible=true
+                //game.paused = true;
             } else {
                 scoreText.text = '-'.repeat(score / proportion);
             }
@@ -270,7 +277,9 @@ function update() {
             if (score2 <= 0) {
                 scoreText2.text = 'Enemy Lose!';
                 scoreText.text = 'Hero Wins!';
-                game.paused = true;
+                buttonNewGame.visible=true;
+                buttonBack.visible=true
+                //game.paused = true;
             } else {
                 scoreText2.text = '='.repeat(score2 / proportion);
             }
@@ -338,4 +347,27 @@ function collectStar2(player2, star) {
 
     scoreText2.text = '='.repeat(score2 / proportion);
 
+}
+
+function startNewGame() {
+var mainBackground = document.getElementsByTagName('div')[0];
+
+        if (mainBackground.className === 'apocalypse-1.jpg') {
+             window.location = '../GameCore/MortalCombatApocalypse.html';
+             } else
+             if (mainBackground.className === 'dungeon-2.jpg') {
+                 window.location = '../GameCore/MortalCombatDungeonTwo.html';
+             } else if (mainBackground.className === 'assets/backgrounds/dungeon-one.jpg') {
+                 window.location = "../GameCore/MortalCombatDungeonOne.html";
+             } else if (mainBackground.className === 'mortal.jpg') {
+                 window.location = '../GameCore/MortalCombat.html';
+             } else if (mainBackground.className === 'sky.png') {
+                 window.location = '../GameCore/MortalCombatSky.html';
+             } else {
+                 window.location = '../GameCore/MortalCombat.html';
+             }
+}
+
+function backToMenu(){
+window.location = './Menu.html';
 }
